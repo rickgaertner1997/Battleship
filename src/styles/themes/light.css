@@ -1,0 +1,7 @@
+:root {
+  --bg: var(--zinc-0);
+  --text: var(--zinc-900);
+  --card: var(--zinc-50);
+  --border: var(--zinc-200);
+  --accent: var(--blue-600);
+}
