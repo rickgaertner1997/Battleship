@@ -1,22 +1,23 @@
 import Cell from "./cell.jsx";
 
 export default function Board({ grid, setGrid }) {
+  
   function handleCellClick(row, col) {
     setGrid((prev) => {
       const next = prev.map((r) => [...r]);
-      next[row][col] = next[row][col] === 0 ? 1 : 0;
+      next[row][col] = AttackCellState.Miss
       return next;
     });
   }
 
   return (
     <div className="board">
-      {grid.map((row, r) =>
-        row.map((value, c) => (
+      {grid.map((row, row_id) =>
+        row.map((value, column_id) => (
           <Cell
-            key={`${r}-${c}`}
-            value={value}
-            onClick={() => handleCellClick(r, c)}
+            key={`${row_id}-${column_id}`}
+            value={ value }
+            onClick={() => handleCellClick(row_id, column_id)}
           />
         ))
       )}
