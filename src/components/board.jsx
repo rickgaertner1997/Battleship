@@ -1,5 +1,5 @@
 import Cell from "./cell.jsx";
-
+import { AttackCellState } from "../constants/base.ts"; 
 export default function Board({ grid, setGrid }) {
   
   function handleCellClick(row, col) {

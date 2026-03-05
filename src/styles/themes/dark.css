@@ -1,4 +1,3 @@
-/* Dark Mode overrides */
 [data-theme="dark"] {
   --bg: var(--zinc-950);
   --text: var(--zinc-50);
