@@ -1,15 +1,24 @@
 import { useState } from 'react'
-import Board from "./components/board.jsx";
+import AttackBoard from "./components/attackBoard.jsx";
 import { createGrid } from "./utils/createGrid.js";
-import { AttackCellState, FleetCellState } from "./constants/base.ts";
+import { ships } from "./constants/ships.js";
+import FleetBoard from './components/fleetBoard.jsx';
+import ShipDock from './components/shipDock.jsx';
 
 function App() {
-  const [ playerGrid, setPlayerGrid] = useState(() => createGrid(10, 10));
+  const [ playerAttackGrid, setAttackPlayerGrid] = useState(() => createGrid(10, 10));
+  const [ playerFleetGrid, setPlayerFeetGrid] = useState(() => createGrid(10, 10));
+// <AttackBoard grid={ playerAttackGrid } setGrid={ setAttackPlayerGrid } />
 
   return (
-    <div style={{ padding: 24 }}>
-      <Board grid={ playerGrid } setGrid={ setPlayerGrid } />
-    </div>
+    <div>
+      <h1>Fleet Setup</h1>
+
+      <div className="fleet-layout">
+        <FleetBoard grid={ playerFleetGrid } setGrid={ setPlayerFeetGrid } />
+        <ShipDock ships={ships} />
+      </div>
+     </div>
   );
 }
 

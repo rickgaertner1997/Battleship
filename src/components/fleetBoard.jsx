@@ -1,6 +1,6 @@
 import Cell from "./cell.jsx";
 import { AttackCellState } from "../constants/base.ts"; 
-export default function Board({ grid, setGrid }) {
+export default function FleetBoard({ grid, setGrid }) {
   
   function handleCellClick(row, col) {
     setGrid((prev) => {
