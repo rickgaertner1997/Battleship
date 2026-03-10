@@ -1,4 +1,4 @@
-import Cell from "./cell.jsx";
+import Cell from "./attackCell.jsx";
 import { AttackCellState } from "../constants/base.ts"; 
 export default function AttackBoard({ grid, setGrid }) {
   

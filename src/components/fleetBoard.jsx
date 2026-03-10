@@ -1,23 +1,18 @@
-import Cell from "./cell.jsx";
-import { AttackCellState } from "../constants/base.ts"; 
-export default function FleetBoard({ grid, setGrid }) {
-  
-  function handleCellClick(row, col) {
-    setGrid((prev) => {
-      const next = prev.map((r) => [...r]);
-      next[row][col] = AttackCellState.Miss
-      return next;
-    });
-  }
+import Cell from "./fleetCell.jsx";
 
+export default function FleetBoard({ grid, onDropShip }) {
   return (
     <div className="board">
-      {grid.map((row, row_id) =>
-        row.map((value, column_id) => (
+      {grid.map((row, rowIndex) =>
+        row.map((value, colIndex) => (
           <Cell
-            key={`${row_id}-${column_id}`}
-            value={ value }
-            onClick={() => handleCellClick(row_id, column_id)}
+            key={`${rowIndex}-${colIndex}`}
+            value={value}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              onDropShip(rowIndex, colIndex);
+            }}
           />
         ))
       )}
