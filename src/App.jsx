@@ -10,7 +10,7 @@ function App() {
   const [playerFleetGrid,   setPlayerFleetGrid] = useState(() => createGrid(10, 10));
   const [draggedShip, setDraggedShip] = useState(null);
 // <AttackBoard grid={ playerAttackGrid } setGrid={ setAttackPlayerGrid } />
-
+    console.log("playerFleetGrid", playerFleetGrid);
   function handleDragShip(ship) {
     setDraggedShip(ship);
   }
@@ -37,7 +37,13 @@ function App() {
       }
 
       for (let i = 0; i < length; i++) {
-        next[row][col + i] = "X";
+        next[row][col + i] = {
+          shipId: draggedShip.id,
+          name: draggedShip.name,
+          image: draggedShip.image,
+          length: draggedShip.length,
+          partIndex: i,
+        };
       }
 
       return next;
@@ -48,6 +54,7 @@ function App() {
 
   return (
     <div>
+       <img src={ships[0].image} alt="test" width="100" />
       <h1>Fleet Setup</h1>
       <div className="fleet-layout">
         <FleetBoard grid={playerFleetGrid} onDropShip={handleDropShip} />
