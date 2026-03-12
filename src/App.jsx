@@ -59,7 +59,6 @@ function App() {
 
   return (
     <div>
-       <img src={ships[0].image} alt="test" width="100" />
       <h1>Fleet Setup</h1>
       <div className="fleet-layout">
         <FleetBoard

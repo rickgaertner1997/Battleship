@@ -25,10 +25,10 @@ export default function FleetBoard({ grid, placedShips, onDropShip }) {
           alt={ship.name}
           className="ship-overlay"
           style={{
-            left: `${ship.col * 40}px`,
-            top: `${ship.row * 40}px`,
-            width: `${ship.length * 40}px`,
-            height: "40px",
+            left: `${ship.col * 60}px`,
+            top: `${ship.row * 60}px`,
+            width: `${ship.length * 60}px`,
+            height: "60px",
           }}
           draggable={false}
         />

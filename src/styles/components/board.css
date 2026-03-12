@@ -1,18 +1,18 @@
 .board-wrapper {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
 }
 
 .board {
   position: absolute;
 
   display: grid;
-  grid-template-columns: repeat(10, 40px);
-  grid-template-rows: repeat(10, 40px);
+  grid-template-columns: repeat(10, 60px);
+  grid-template-rows: repeat(10, 60px);
 
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
 
   gap: 0;
   z-index: 1;
@@ -27,5 +27,5 @@
 .fleet-layout {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
+  gap: 60px;
 }

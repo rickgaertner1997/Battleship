@@ -16,5 +16,6 @@
 
 .ship-image {
   width: 150px;
+  max-height: 50px;;
   display: block;
 }
