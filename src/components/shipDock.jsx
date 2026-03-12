@@ -11,10 +11,7 @@ export default function ShipDock({ ships, onDragShip }) {
             key={ship.id}
             className="ship-card"
             draggable
-            onDragStart={() => {
-              console.log("drag start", ship.id);
-              onDragShip(ship);
-            }}
+            onDragStart={() => onDragShip(ship)}
           >
             <img
               src={ship.image}
@@ -22,7 +19,7 @@ export default function ShipDock({ ships, onDragShip }) {
               className="ship-image"
               draggable={false}
             />
-            <span className="ship-name">{ship.name}</span>
+            <span>{ship.name}</span>
           </div>
         ))}
       </div>

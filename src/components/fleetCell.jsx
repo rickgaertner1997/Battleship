@@ -1,18 +1,9 @@
-export default function Cell({ value, onDragOver, onDrop }) {
+export default function Cell({ onDragOver, onDrop }) {
   return (
     <div
-      className={`cell ${value ? "occupied" : ""}`}
+      className="cell"
       onDragOver={onDragOver}
       onDrop={onDrop}
-    >
-      {value?.image && (
-        <img
-          src={value.image}
-          alt={value.name}
-          className="placed-ship-image"
-          draggable={false}
-        />
-      )}
-    </div>
+    />
   );
 }

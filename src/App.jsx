@@ -9,8 +9,8 @@ function App() {
   const [playerAttackGrid, setAttackPlayerGrid] = useState(() => createGrid(10, 10));
   const [playerFleetGrid,   setPlayerFleetGrid] = useState(() => createGrid(10, 10));
   const [draggedShip, setDraggedShip] = useState(null);
+  const [placedShips, setPlacedShips] = useState([]);
 // <AttackBoard grid={ playerAttackGrid } setGrid={ setAttackPlayerGrid } />
-    console.log("playerFleetGrid", playerFleetGrid);
   function handleDragShip(ship) {
     setDraggedShip(ship);
   }
@@ -19,37 +19,42 @@ function App() {
     if (!draggedShip) return;
 
     const length = draggedShip.length;
-    console.log("trying to place", draggedShip.name, "at", row, col, "length:", length);
+
+    let wasPlaced = false;
 
     setPlayerFleetGrid((prev) => {
       const next = prev.map((r) => [...r]);
 
-      if (col + length > 10) {
-        console.log("out of bounds");
-        return prev;
+      if (col + length > 10) return prev;
+
+      for (let i = 0; i < length; i++) {
+        if (next[row][col + i] !== null) return prev;
       }
 
       for (let i = 0; i < length; i++) {
-        if (next[row][col + i] !== null) {
-          console.log("overlap at", row, col + i);
-          return prev;
-        }
+        next[row][col + i] = draggedShip.id;
       }
 
-      for (let i = 0; i < length; i++) {
-        next[row][col + i] = {
-          shipId: draggedShip.id,
-          name: draggedShip.name,
-          image: draggedShip.image,
-          length: draggedShip.length,
-          partIndex: i,
-        };
-      }
-
+      wasPlaced = true;
       return next;
     });
 
-    setDraggedShip(null);
+    if (wasPlaced) {
+      setPlacedShips((prev) => [
+        ...prev,
+        {
+          id: draggedShip.id,
+          name: draggedShip.name,
+          image: draggedShip.image,
+          row,
+          col,
+          length: draggedShip.length,
+          orientation: "horizontal",
+        },
+      ]);
+
+      setDraggedShip(null);
+    }
   }
 
   return (
@@ -57,7 +62,11 @@ function App() {
        <img src={ships[0].image} alt="test" width="100" />
       <h1>Fleet Setup</h1>
       <div className="fleet-layout">
-        <FleetBoard grid={playerFleetGrid} onDropShip={handleDropShip} />
+        <FleetBoard
+          grid={playerFleetGrid}
+          placedShips={placedShips}
+          onDropShip={handleDropShip}
+        />
         <ShipDock ships={ships} onDragShip={handleDragShip} />
       </div>
     </div>

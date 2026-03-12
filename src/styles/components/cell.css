@@ -15,24 +15,4 @@
   padding: none;
 
   color: var(--text);
-  overflow: hidden;
-}
-
-.cell.occupied {
-  background: #7c9cc2;
-}
-
-.placed-ship-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-.placed-ship-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  display: block;
 }
