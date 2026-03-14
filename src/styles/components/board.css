@@ -6,6 +6,8 @@
 
 .board {
   position: absolute;
+  top: 0;
+  left: 0;
 
   display: grid;
   grid-template-columns: repeat(10, 60px);

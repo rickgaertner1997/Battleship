@@ -17,10 +17,9 @@ export default function FleetBoard({ grid, placedShips, onDropShip }) {
           ))
         )}
       </div>
-
       {placedShips.map((ship, i) => (
         <img
-          key={i}
+         key={ship.id}
           src={ship.image}
           alt={ship.name}
           className="ship-overlay"

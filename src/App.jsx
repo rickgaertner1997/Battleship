@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import AttackBoard from "./components/attackBoard.jsx";
-import { createGrid } from "./utils/createGrid.js";
 import { ships } from "./constants/ships.js";
 import FleetBoard from './components/fleetBoard.jsx';
 import ShipDock from './components/shipDock.jsx';
+import { createGrid } from "./utils/createGrid.js";
+import  { placeShipOnGrid } from "./utils/placeShip.js";
 
 function App() {
-  const [playerAttackGrid, setAttackPlayerGrid] = useState(() => createGrid(10, 10));
-  const [playerFleetGrid,   setPlayerFleetGrid] = useState(() => createGrid(10, 10));
-  const [draggedShip, setDraggedShip] = useState(null);
+  const [playerFleetGrid, setPlayerFleetGrid] = useState(() => createGrid(10, 10));
   const [placedShips, setPlacedShips] = useState([]);
-// <AttackBoard grid={ playerAttackGrid } setGrid={ setAttackPlayerGrid } />
+  const [draggedShip, setDraggedShip] = useState(null);
+
   function handleDragShip(ship) {
     setDraggedShip(ship);
   }
@@ -18,58 +18,46 @@ function App() {
   function handleDropShip(row, col) {
     if (!draggedShip) return;
 
-    const length = draggedShip.length;
+    const result = placeShipOnGrid(playerFleetGrid, draggedShip, row, col);
 
-    let wasPlaced = false;
+    if (!result.ok) return;
 
-    setPlayerFleetGrid((prev) => {
-      const next = prev.map((r) => [...r]);
+    setPlayerFleetGrid(result.nextGrid);
 
-      if (col + length > 10) return prev;
+    setPlacedShips((prev) => [
+      ...prev,
+      {
+        ...draggedShip,
+        row,
+        col,
+        orientation: "horizontal",
+      },
+    ]);
 
-      for (let i = 0; i < length; i++) {
-        if (next[row][col + i] !== null) return prev;
-      }
-
-      for (let i = 0; i < length; i++) {
-        next[row][col + i] = draggedShip.id;
-      }
-
-      wasPlaced = true;
-      return next;
-    });
-
-    if (wasPlaced) {
-      setPlacedShips((prev) => [
-        ...prev,
-        {
-          id: draggedShip.id,
-          name: draggedShip.name,
-          image: draggedShip.image,
-          row,
-          col,
-          length: draggedShip.length,
-          orientation: "horizontal",
-        },
-      ]);
-
-      setDraggedShip(null);
-    }
+    setDraggedShip(null);
   }
+
+  const availableShips = ships.filter(
+    (ship) => !placedShips.some((placed) => placed.id === ship.id)
+  );
 
   return (
     <div>
       <h1>Fleet Setup</h1>
+
       <div className="fleet-layout">
         <FleetBoard
           grid={playerFleetGrid}
           placedShips={placedShips}
           onDropShip={handleDropShip}
         />
-        <ShipDock ships={ships} onDragShip={handleDragShip} />
+        <ShipDock
+          ships={availableShips}
+          onDragShip={handleDragShip}
+        />
       </div>
     </div>
   );
 }
 
-export default App
+export default App;

@@ -12,10 +12,11 @@
   border: 1px solid #ccc;
   padding: 8px;
   cursor: grab;
+  height: 40px;
 }
 
 .ship-image {
   width: 150px;
-  max-height: 50px;;
+  max-height: 30px;;
   display: block;
 }
