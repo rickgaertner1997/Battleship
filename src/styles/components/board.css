@@ -19,13 +19,15 @@
   gap: 0;
   z-index: 1;
 }
-
 .ship-overlay {
   position: absolute;
   z-index: 2;
-  pointer-events: none;
 }
 
+.ship-overlay--interactive {
+  pointer-events: auto;
+  cursor: grab;
+}
 .fleet-layout {
   display: flex;
   align-items: flex-start;

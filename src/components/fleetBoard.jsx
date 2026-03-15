@@ -1,6 +1,13 @@
 import Cell from "./fleetCell.jsx";
 
-export default function FleetBoard({ grid, placedShips, onDropShip }) {
+const CELL_SIZE = 60;
+
+export default function FleetBoard({
+  grid,
+  placedShips,
+  onDropShip,
+  onRepositionShip,
+}) {
   return (
     <div className="board-wrapper">
       <div className="board">
@@ -17,21 +24,27 @@ export default function FleetBoard({ grid, placedShips, onDropShip }) {
           ))
         )}
       </div>
-      {placedShips.map((ship, i) => (
-        <img
-         key={ship.id}
-          src={ship.image}
-          alt={ship.name}
-          className="ship-overlay"
-          style={{
-            left: `${ship.col * 60}px`,
-            top: `${ship.row * 60}px`,
-            width: `${ship.length * 60}px`,
-            height: "60px",
-          }}
-          draggable={false}
-        />
-      ))}
+
+      {placedShips.map((ship) => {
+        const isHorizontal = ship.orientation === "horizontal";
+
+        return (
+          <img
+            key={`${ship.id}-${ship.row}-${ship.col}`}
+            src={ship.image}
+            alt={ship.name}
+            className="ship-overlay ship-overlay--interactive"
+            style={{
+              left: `${ship.col * CELL_SIZE}px`,
+              top: `${ship.row * CELL_SIZE}px`,
+              width: isHorizontal ? `${ship.length * CELL_SIZE}px` : `60px`,
+              height: isHorizontal ? `60px` : `${ship.length * CELL_SIZE}px`,
+            }}
+            onClick={() => onRepositionShip(ship)}
+            draggable={false}
+          />
+        );
+      })}
     </div>
   );
 }
