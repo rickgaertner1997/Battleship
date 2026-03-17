@@ -11,19 +11,23 @@ function App() {
   const [placedShips, setPlacedShips] = useState([]);
   const [draggedShip, setDraggedShip] = useState(null);
   const [shipOrientation, setShipOrientation] = useState("horizontal");
+  const [isFleetLocked, setIsFleetLocked] = useState(false);
 
   function handleDragShip(ship) {
+    if (isFleetLocked) return;
     setDraggedShip(ship);
-    setShipOrientation(ship.orientation ?? "horizontal");
   }
 
   function handleRotateShip() {
+    if (isFleetLocked) return;
+
     setShipOrientation((prev) =>
       prev === "horizontal" ? "vertical" : "horizontal"
     );
   }
 
   function handleDropShip(row, col) {
+    if (isFleetLocked) return;
     if (!draggedShip) return;
 
     const result = placeShipOnGrid(
@@ -49,6 +53,8 @@ function App() {
   }
 
   function resetFleet() {
+    if (isFleetLocked) return;
+
     setPlayerFleetGrid(createGrid(10, 10));
     setPlacedShips([]);
     setDraggedShip(null);
@@ -56,15 +62,26 @@ function App() {
   }
 
   function removePlacedShip(shipId) {
+    if (isFleetLocked) return;
+
     const nextPlacedShips = placedShips.filter((ship) => ship.id !== shipId);
     setPlacedShips(nextPlacedShips);
     setPlayerFleetGrid(buildGridFromShips(nextPlacedShips, 10));
   }
-
+  
   function handleRepositionShip(ship) {
+    if (isFleetLocked) return;
+
     removePlacedShip(ship.id);
     setDraggedShip(ship);
     setShipOrientation(ship.orientation ?? "horizontal");
+  }
+
+  function handleReady() {
+    if (placedShips.length !== ships.length) return;
+
+    setDraggedShip(null);
+    setIsFleetLocked(true);
   }
 
   const availableShips = ships.filter(
@@ -73,18 +90,29 @@ function App() {
       draggedShip?.id === ship.id
   );
 
+  const allShipsPlaced = placedShips.length === ships.length;
+
   return (
     <div style={{ padding: 24 }}>
       <h1>Fleet Setup</h1>
 
       <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-        <button onClick={handleRotateShip}>
+        <button onClick={handleRotateShip} disabled={isFleetLocked}>
           Rotate ({shipOrientation})
         </button>
-        <button onClick={resetFleet}>
+
+        <button onClick={resetFleet} disabled={isFleetLocked}>
           Reset Board
         </button>
+
+        <button onClick={handleReady} disabled={!allShipsPlaced || isFleetLocked}>
+          {isFleetLocked ? "Fleet Locked" : "Ready"}
+        </button>
       </div>
+
+      {!allShipsPlaced && !isFleetLocked && (
+        <p>Place all ships before pressing Ready.</p>
+      )}
 
       <div className="fleet-layout">
         <FleetBoard
@@ -92,8 +120,12 @@ function App() {
           placedShips={placedShips}
           onDropShip={handleDropShip}
           onRepositionShip={handleRepositionShip}
+          isFleetLocked={isFleetLocked}
         />
-        <ShipDock ships={availableShips} onDragShip={handleDragShip} />
+
+        {!isFleetLocked && (
+          <ShipDock ships={availableShips} onDragShip={handleDragShip} />
+        )}
       </div>
     </div>
   );
