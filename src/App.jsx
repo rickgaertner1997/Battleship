@@ -114,6 +114,7 @@ function App() {
         <p>Place all ships before pressing Ready.</p>
       )}
 
+
       <div className="fleet-layout">
         <FleetBoard
           grid={playerFleetGrid}
@@ -122,6 +123,7 @@ function App() {
           onRepositionShip={handleRepositionShip}
           isFleetLocked={isFleetLocked}
         />
+
 
         {!isFleetLocked && (
           <ShipDock ships={availableShips} onDragShip={handleDragShip} />
