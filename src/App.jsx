@@ -124,7 +124,6 @@ function App() {
           isFleetLocked={isFleetLocked}
         />
 
-
         {!isFleetLocked && (
           <ShipDock ships={availableShips} onDragShip={handleDragShip} />
         )}
