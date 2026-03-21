@@ -114,7 +114,6 @@ function App() {
         <p>Place all ships before pressing Ready.</p>
       )}
 
-
       <div className="fleet-layout">
         <FleetBoard
           grid={playerFleetGrid}
