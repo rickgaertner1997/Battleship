@@ -11,16 +11,18 @@ export default function AttackBoard({ grid, setGrid }) {
   }
 
   return (
-    <div className="board">
-      {grid.map((row, row_id) =>
-        row.map((value, column_id) => (
-          <Cell
-            key={`${row_id}-${column_id}`}
-            value={ value }
-            onClick={() => handleCellClick(row_id, column_id)}
-          />
-        ))
-      )}
+    <div className="board-wrapper">
+      <div className="board">
+        {grid.map((row, row_id) =>
+          row.map((value, column_id) => (
+            <Cell
+              key={`${row_id}-${column_id}`}
+              value={ value }
+              onClick={() => handleCellClick(row_id, column_id)}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }
