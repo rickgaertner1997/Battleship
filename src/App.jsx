@@ -64,6 +64,30 @@ function App() {
     setShipOrientation("horizontal");
   }
 
+  function buildRandomEnemyGrid() {
+    let grid = createGrid(10, 10);
+
+    for (const ship of ships) {
+      let placed = false;
+
+      while (!placed) {
+        const orientation = Math.random() > 0.5 ? "horizontal" : "vertical";
+        const row = Math.floor(Math.random() * 10);
+        const col = Math.floor(Math.random() * 10);
+
+        const result = placeShipOnGrid(grid, ship, row, col, orientation);
+
+        if (result.ok) {
+          grid = result.nextGrid;
+          placed = true;
+        }
+      }
+    }
+
+    return grid;
+  }
+
+
   function removePlacedShip(shipId) {
     if (isFleetLocked) return;
 
@@ -81,6 +105,9 @@ function App() {
   }
 
   function handleReady() {
+    const aiGrid = buildRandomEnemyGrid();
+    setEnemyGrid(aiGrid);
+    
     if (placedShips.length !== ships.length) return;
 
     setDraggedShip(null);
