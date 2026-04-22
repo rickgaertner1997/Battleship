@@ -10,6 +10,7 @@ import { ships } from "./constants/ships.js";
 function App() {
   const [phase, setPhase] = useState("setup");
   const [playerFleetGrid, setPlayerFleetGrid] = useState(() => createGrid(10, 10));
+  const [enemyGrid, setEnemyGrid] = useState(() => createGrid(10, 10));
   const [attackGrid, setAttackGrid] = useState(() => createGrid(10, 10));
   const [placedShips, setPlacedShips] = useState([]);
   const [draggedShip, setDraggedShip] = useState(null);
@@ -20,6 +21,7 @@ function App() {
     if (isFleetLocked) return;
     setDraggedShip(ship);
   }
+  
 
   function handleRotateShip() {
     if (isFleetLocked) return;
@@ -107,7 +109,7 @@ function App() {
   function handleReady() {
     const aiGrid = buildRandomEnemyGrid();
     setEnemyGrid(aiGrid);
-    
+
     if (placedShips.length !== ships.length) return;
 
     setDraggedShip(null);
