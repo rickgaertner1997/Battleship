@@ -14,6 +14,7 @@ export function placeShipOnGrid(grid, ship, row, col, orientation) {
     for (let i = 0; i < length; i++) {
       nextGrid[row][col + i] = ship.id;
     }
+    
   } else {
     if (row + length > 10) return { ok: false, nextGrid: grid };
 

@@ -21,7 +21,6 @@ function App() {
     if (isFleetLocked) return;
     setDraggedShip(ship);
   }
-  
 
   function handleRotateShip() {
     if (isFleetLocked) return;
@@ -76,7 +75,6 @@ function App() {
         const orientation = Math.random() > 0.5 ? "horizontal" : "vertical";
         const row = Math.floor(Math.random() * 10);
         const col = Math.floor(Math.random() * 10);
-
         const result = placeShipOnGrid(grid, ship, row, col, orientation);
 
         if (result.ok) {
@@ -85,7 +83,7 @@ function App() {
         }
       }
     }
-
+    console.log(grid);
     return grid;
   }
 
