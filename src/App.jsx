@@ -166,7 +166,7 @@ function App() {
           <h1>Attack Phase</h1>
         
           <div className="fleet-layout">
-            <AttackBoard grid={attackGrid} setGrid={setAttackGrid} />
+            <AttackBoard grid={attackGrid} setGrid={setAttackGrid} enemyGrid={enemyGrid} />
           </div>
         </>
       )}

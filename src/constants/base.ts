@@ -1,7 +1,7 @@
 export enum AttackCellState {
-  Empty,
   Miss,
-  Hit
+  Hit,
+  Destroyed
 }
 
 export enum FleetCellState {

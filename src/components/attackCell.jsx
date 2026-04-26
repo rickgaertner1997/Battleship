@@ -5,11 +5,11 @@ export default function Cell({ value, onClick }) {
 
   let symbol = '';
 
-  if (value === AttackCellState.Miss) {
-    symbol = 'X';
+  if (value !== null && value!== AttackCellState.Miss){
+    symbol = 'X'
   }
 
-  if (value === AttackCellState.Hit) {
+   if (value === AttackCellState.Miss) {
     symbol = 'O';
   }
 
