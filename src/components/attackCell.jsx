@@ -9,9 +9,15 @@ export default function Cell({ value, onClick }) {
     symbol = 'X'
   }
 
-   if (value === AttackCellState.Miss) {
+  if (value === AttackCellState.Miss) {
     symbol = 'O';
   }
+
+    if (value === AttackCellState.Sunk) {
+    symbol = '🔥';
+  }
+
+  
 
   return (
     <button

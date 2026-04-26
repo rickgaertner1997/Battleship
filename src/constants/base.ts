@@ -1,8 +1,8 @@
-export enum AttackCellState {
-  Miss,
-  Hit,
-  Destroyed
-}
+export const AttackCellState = {
+  Hit: "hit",
+  Miss: "miss",
+  Sunk: "sunk",
+};
 
 export enum FleetCellState {
   Empty,
