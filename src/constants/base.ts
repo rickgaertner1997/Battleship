@@ -8,10 +8,3 @@ export enum FleetCellState {
   Empty,
   Ship
 }
-
-
-export enum FleetCellState {
-  Empty,
-  Ship
-}
-
