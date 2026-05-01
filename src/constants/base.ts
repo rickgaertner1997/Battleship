@@ -9,3 +9,9 @@ export enum FleetCellState {
   Ship
 }
 
+
+export enum FleetCellState {
+  Empty,
+  Ship
+}
+
