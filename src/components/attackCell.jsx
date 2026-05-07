@@ -17,8 +17,6 @@ export default function Cell({ value, onClick }) {
     symbol = '🔥';
   }
 
-  
-
   return (
     <button
       type='button'
