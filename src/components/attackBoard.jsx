@@ -23,6 +23,7 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     return true;
   }
 
+  // TODO: Optimize the search
   function markShipAsSunk(enemyGrid, attackGrid, shipId) {
     const next = attackGrid.map((row) => [...row]);
 
@@ -33,7 +34,6 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
         }
       }
     }
-
     return next;
   }
   
