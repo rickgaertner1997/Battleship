@@ -1,5 +1,6 @@
 import Cell from "./attackCell.jsx";
 import { AttackCellState } from "../constants/base.ts"; 
+import {ships} from "../constants/ships.ts"; 
 export default function AttackBoard({ grid, setGrid, enemyGrid}) {
 
   function handleAttack(row, col){
@@ -8,43 +9,27 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
   }
 
  // TODO: Optimize the search
-  function isShipDestroyed(enemyGrid, attackGrid, shipId) {
-    console.log(shipId);
+  function getHittedShipParts(enemyGrid, attackGrid, shipId) {
+    
+    let shipsPartsCell = []
     for (let row = 0; row < enemyGrid.length; row++) {
       for (let col = 0; col < enemyGrid[row].length; col++) {
         const enemyCell = enemyGrid[row][col];
-        console.log("col: " + col + "Row: " + row);
-        console.log(enemyCell?.shipId);
-        const y = (enemyCell?.shipId === shipId)
-        console.log("Enemy cell is");
-        console.log(y);
-        if (enemyCell?.shipId === shipId) {
-          const x = (attackGrid[row][col] !== AttackCellState.Hit)
-          console.log(x);
-          if (attackGrid[row][col] !== AttackCellState.Hit) {
-            return false;
+        if (enemyCell == shipId) {
+          if (attackGrid[row][col] == AttackCellState.Hit) {
+            shipsPartsCell << {row: row, col: col}
           }
         }
       }
     }
 
-    return true;
+    return shipsPartsCell;
   }
 
-  // TODO: Optimize the search
-  function markShipAsSunk(enemyGrid, attackGrid, shipId) {
-    const next = attackGrid.map((row) => [...row]);
-
-    for (let row = 0; row < enemyGrid.length; row++) {
-      for (let col = 0; col < enemyGrid[row].length; col++) {
-        if (enemyGrid[row][col]?.shipId === shipId) {
-          next[row][col] = AttackCellState.Sunk;
-        }
-      }
-    }
-    return next;
+  function getShip(shipId) {
+    return ships.find(ship => ship.id === shipId) || null;
   }
-  
+
   function handleCellClick(row, col) {
   setGrid((prev) => {
     let next = prev.map((r) => [...r]);
@@ -56,20 +41,27 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
       next[row][col] = AttackCellState.Miss;
     } else {
       next[row][col] = AttackCellState.Hit;
+      console.log("EnemyCell " + enemyCell);
+      const selectedShip = getShip(enemyCell);
+      console.log("BACK")
+      console.log(selectedShip);
 
-      const destroyed = isShipDestroyed(
+      const hittedShipParts = getHittedShipParts(
         enemyGrid,
         next,
-        enemyCell.shipId
+        enemyCell
       );
 
-      if (destroyed) {
-        next = markShipAsSunk(
-          enemyGrid,
-          next,
-          enemyCell.shipId
-        );
+      console.log("Shipparts");
+      console.log(hittedShipParts);
+      console.log(hittedShipParts.length == selectedShip.length)
+     
+      if (hittedShipParts.length == selectedShip.length){
+        hittedShipParts.map(cell => {
+          next[cell.row][cell.col] = AttackCellState.Sunk;
+        });
       }
+      
     }
 
     return next;
