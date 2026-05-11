@@ -83,7 +83,6 @@ function App() {
         }
       }
     }
-    console.log(grid);
     return grid;
   }
 

@@ -7,12 +7,20 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     return enemy == null ? AttackCellState.Miss : enemyGrid; 
   }
 
+ // TODO: Optimize the search
   function isShipDestroyed(enemyGrid, attackGrid, shipId) {
+    console.log(shipId);
     for (let row = 0; row < enemyGrid.length; row++) {
       for (let col = 0; col < enemyGrid[row].length; col++) {
         const enemyCell = enemyGrid[row][col];
-
+        console.log("col: " + col + "Row: " + row);
+        console.log(enemyCell?.shipId);
+        const y = (enemyCell?.shipId === shipId)
+        console.log("Enemy cell is");
+        console.log(y);
         if (enemyCell?.shipId === shipId) {
+          const x = (attackGrid[row][col] !== AttackCellState.Hit)
+          console.log(x);
           if (attackGrid[row][col] !== AttackCellState.Hit) {
             return false;
           }
@@ -44,7 +52,6 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     if (next[row][col] !== null) return prev;
 
     const enemyCell = enemyGrid[row][col];
-
     if (enemyCell == null) {
       next[row][col] = AttackCellState.Miss;
     } else {
