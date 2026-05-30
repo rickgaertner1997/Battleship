@@ -28,4 +28,5 @@ export default function Cell({ value, onClick, disabled }) {
       {symbol}
     </button>
   );
+  
 }
