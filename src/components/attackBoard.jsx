@@ -10,24 +10,37 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
 
  // TODO: Optimize the search
   function getHittedShipParts(enemyGrid, attackGrid, shipId) {
-    
-    let shipsPartsCell = []
+    const hitParts = [];
+
     for (let row = 0; row < enemyGrid.length; row++) {
       for (let col = 0; col < enemyGrid[row].length; col++) {
-        const enemyCell = enemyGrid[row][col];
-        if (enemyCell == shipId) {
-          if (attackGrid[row][col] == AttackCellState.Hit) {
-            shipsPartsCell << {row: row, col: col}
-          }
+        const isCorrecteState = checkCorrectState(enemyGrid[row][col], shipId, attackGrid[row][col], AttackCellState.Hit);
+        if (isCorrecteState) {
+          hitParts.push({ row, col });
         }
       }
     }
 
-    return shipsPartsCell;
+    return hitParts;
+  }
+
+  function checkCorrectState(enemyCell, shipId, attackCell, state){
+    return (enemyCell === shipId && attackCell === state)
   }
 
   function getShip(shipId) {
     return ships.find(ship => ship.id === shipId) || null;
+  }
+
+  function markShipsAsSunk(hittedShipParts, next){
+    hittedShipParts.forEach(({ row, col }) => {
+      next[row][col] = AttackCellState.Sunk;
+    });
+    return next;
+  }
+
+  function compareLengthsOfArrays(array1, array2){
+    return array1.length === array2.length
   }
 
   function handleCellClick(row, col) {
@@ -41,27 +54,17 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
       next[row][col] = AttackCellState.Miss;
     } else {
       next[row][col] = AttackCellState.Hit;
-      console.log("EnemyCell " + enemyCell);
       const selectedShip = getShip(enemyCell);
-      console.log("BACK")
-      console.log(selectedShip);
-
       const hittedShipParts = getHittedShipParts(
         enemyGrid,
         next,
         enemyCell
       );
 
-      console.log("Shipparts");
-      console.log(hittedShipParts);
-      console.log(hittedShipParts.length == selectedShip.length)
      
-      if (hittedShipParts.length == selectedShip.length){
-        hittedShipParts.map(cell => {
-          next[cell.row][cell.col] = AttackCellState.Sunk;
-        });
+      if (compareLengthsOfArrays(hittedShipParts, selectedShip)) {
+       next = markShipsAsSunk(hittedShipParts, next)
       }
-      
     }
 
     return next;
@@ -84,3 +87,4 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     </div>
   );
 }
+
