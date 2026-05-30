@@ -1,7 +1,16 @@
 import Cell from "./attackCell.jsx";
 import { AttackCellState } from "../constants/base.ts"; 
 import {ships} from "../constants/ships.ts"; 
-export default function AttackBoard({ grid, setGrid, enemyGrid}) {
+export default function AttackBoard({
+  grid,
+  setGrid,
+  enemyGrid,
+  hitCount,
+  setHitCount,
+  totalShipCells,
+  setWinner,
+  disabled
+}) {
 
   function handleAttack(row, col){
     const enemy = enemyGrid[row][col]
@@ -53,6 +62,13 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     if (enemyCell == null) {
       next[row][col] = AttackCellState.Miss;
     } else {
+      const nextHitCount = hitCount + 1;
+      setHitCount(nextHitCount);
+
+      if (nextHitCount === totalShipCells) {
+        setWinner("player");
+      }
+
       next[row][col] = AttackCellState.Hit;
       const selectedShip = getShip(enemyCell);
       const hittedShipParts = getHittedShipParts(
@@ -61,10 +77,11 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
         enemyCell
       );
 
-     
+      
       if (compareLengthsOfArrays(hittedShipParts, selectedShip)) {
        next = markShipsAsSunk(hittedShipParts, next)
       }
+
     }
 
     return next;
@@ -79,6 +96,7 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
             <Cell
               key={`${row_id}-${column_id}`}
               value={ value }
+              disabled={winner !== null}
               onClick={() => handleCellClick(row_id, column_id)}
             />
           ))

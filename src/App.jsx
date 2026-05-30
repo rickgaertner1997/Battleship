@@ -17,6 +17,11 @@ function App() {
   const [shipOrientation, setShipOrientation] = useState("horizontal");
   const [isFleetLocked, setIsFleetLocked] = useState(false);
 
+  const [playerHitCount, setPlayerHitCount] = useState(0);
+  const [winner, setWinner] = useState(null);
+
+  const totalShipCells = ships.reduce((sum, ship) => sum + ship.length, 0);
+
   function handleDragShip(ship) {
     if (isFleetLocked) return;
     setDraggedShip(ship);
@@ -164,8 +169,19 @@ function App() {
         <>
           <h1>Attack Phase</h1>
         
+          {winner === "player" && <h2>You win!</h2>}
+
           <div className="fleet-layout">
-            <AttackBoard grid={attackGrid} setGrid={setAttackGrid} enemyGrid={enemyGrid} />
+            <AttackBoard
+              grid={attackGrid}
+              setGrid={setAttackGrid}
+              enemyGrid={enemyGrid}
+              hitCount={playerHitCount}
+              setHitCount={setPlayerHitCount}
+              totalShipCells={totalShipCells}
+              setWinner={setWinner}
+              disabled={winner !== null}
+            />
           </div>
         </>
       )}

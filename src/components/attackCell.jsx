@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { AttackCellState } from "../constants/base.js";
 
-export default function Cell({ value, onClick }) {
+export default function Cell({ value, onClick, disabled }) {
 
   let symbol = '';
 
@@ -21,6 +21,7 @@ export default function Cell({ value, onClick }) {
     <button
       type='button'
       onClick={onClick}
+      disabled={disabled}
       className='cell'
       aria-label={`cell ${value}`}
     >
