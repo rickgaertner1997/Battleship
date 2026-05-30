@@ -87,4 +87,3 @@ export default function AttackBoard({ grid, setGrid, enemyGrid}) {
     </div>
   );
 }
-
