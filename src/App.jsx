@@ -11,6 +11,7 @@ function App() {
   const [phase, setPhase] = useState("setup");
   const [playerFleetGrid, setPlayerFleetGrid] = useState(() => createGrid(10, 10));
   const [enemyGrid, setEnemyGrid] = useState(() => createGrid(10, 10));
+  const [enemyAttackGrid, setEnemyAttackGrid] = useState(() => createGrid(10, 10));
   const [attackGrid, setAttackGrid] = useState(() => createGrid(10, 10));
   const [placedShips, setPlacedShips] = useState([]);
   const [draggedShip, setDraggedShip] = useState(null);
