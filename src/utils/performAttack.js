@@ -44,7 +44,6 @@ export function performAttack({
     return next;
   }
 
-asdasd
   const nextHitCount = hitCount + 1;
   setHitCount(nextHitCount);
 
