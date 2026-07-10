@@ -7,6 +7,11 @@ export default function AttackBoard({
   grid,
   setGrid,
   enemyGrid,
+  playerFleetGrid,
+  setEnemyAttackGrid,
+  enemyAttackGrid,
+  setAiHitCount,
+  aiHitCount,
   hitCount,
   setHitCount,
   totalShipCells,
@@ -28,6 +33,21 @@ export default function AttackBoard({
       setHitCount,
       setWinner,
       winnerName: "player",
+    })
+
+  );
+
+  setEnemyAttackGrid((prev) =>
+    performAiAttack({
+      row,
+      col,
+      attackGrid: prev,
+      playerFleetGrid,
+      aiHitCount,
+      totalShipCells,
+      setAiHitCount,
+      setWinner,
+      winnerName: "ai",
     })
   );
 }

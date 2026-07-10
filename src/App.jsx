@@ -19,6 +19,8 @@ function App() {
   const [isFleetLocked, setIsFleetLocked] = useState(false);
 
   const [playerHitCount, setPlayerHitCount] = useState(0);
+  const [aiHitCount, setAiHitCount] = useState(0);
+
   const [winner, setWinner] = useState(null);
 
   const totalShipCells = ships.reduce((sum, ship) => sum + ship.length, 0);
@@ -177,6 +179,11 @@ function App() {
               grid={attackGrid}
               setGrid={setAttackGrid}
               enemyGrid={enemyGrid}
+              playerFleetGrid={playerFleetGrid}
+              setEnemyAttackGrid={setEnemyAttackGrid}
+              enemyAttackGrid={enemyAttackGrid}
+              setAiHitCount={setAiHitCount}
+              aiHitCount={aiHitCount}
               hitCount={playerHitCount}
               setHitCount={setPlayerHitCount}
               totalShipCells={totalShipCells}
