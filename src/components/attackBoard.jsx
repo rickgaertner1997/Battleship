@@ -20,37 +20,46 @@ export default function AttackBoard({
 }) {
 
   function handleCellClick(row, col) {
-  if (disabled) return;
+    if (disabled) return;
 
-  setGrid((prev) =>
-    performAttack({
-      row,
-      col,
-      attackGrid: prev,
-      enemyGrid,
-      hitCount,
-      totalShipCells,
-      setHitCount,
-      setWinner,
-      winnerName: "player",
-    })
+    setGrid((prev) =>
+      performAttack({
+        row,
+        col,
+        attackGrid: prev,
+        enemyGrid,
+        hitCount,
+        totalShipCells,
+        setHitCount,
+        setWinner,
+        winnerName: "player",
+      })
+    );
 
-  );
+    setEnemyAttackGrid((prev) => {
+      const rows = prev.length;
+      const cols = prev[0].length;
 
-  setEnemyAttackGrid((prev) =>
-    performAiAttack({
-      row,
-      col,
-      attackGrid: prev,
-      playerFleetGrid,
-      aiHitCount,
-      totalShipCells,
-      setAiHitCount,
-      setWinner,
-      winnerName: "ai",
-    })
-  );
-}
+      let row, col;
+
+      do {
+        row = Math.floor(Math.random() * rows);
+        col = Math.floor(Math.random() * cols);
+      } while (prev[row][col] !== null);
+
+      performAttack({
+        row,
+        col,
+        attackGrid: prev,
+        playerFleetGrid,
+        aiHitCount,
+        totalShipCells,
+        setAiHitCount,
+        setWinner,
+        winnerName: "ai",
+      })
+    });
+  };
   return (
     <div className="board-wrapper">
       <div className="board">
