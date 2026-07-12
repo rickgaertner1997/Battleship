@@ -21,9 +21,10 @@ export default function AttackBoard({
 
   function handleCellClick(row, col) {
     if (disabled) return;
-
-    setGrid((prev) =>
-      performAttack({
+    console.log("setGrid");
+    console.log(setGrid);
+    setGrid((prev) => {
+      const result = performAttack({
         row,
         col,
         attackGrid: prev,
@@ -33,33 +34,56 @@ export default function AttackBoard({
         setHitCount,
         setWinner,
         winnerName: "player",
-      })
-    );
+      });
 
-    setEnemyAttackGrid((prev) => {
-      const rows = prev.length;
-      const cols = prev[0].length;
+      return result.nextGrid;
+    });
 
-      let row, col;
+  setEnemyAttackGrid((prevAi) => {
+      const availableCells = [];
 
-      do {
-        row = Math.floor(Math.random() * rows);
-        col = Math.floor(Math.random() * cols);
-      } while (prev[row][col] !== null);
+      for (let row = 0; row < prevAi.length; row++) {
+        for (let col = 0; col < prevAi[row].length; col++) {
+          if (prevAi[row][col] === null) {
+            availableCells.push({ row, col });
+          }
+        }
+      }
 
-      performAttack({
-        row,
-        col,
-        attackGrid: prev,
-        playerFleetGrid,
-        aiHitCount,
+      if (availableCells.length === 0) return prevAi;
+
+      const randomCell =
+        availableCells[Math.floor(Math.random() * availableCells.length)];
+
+      const result = performAttack({
+        row: randomCell.row,
+        col: randomCell.col,
+        attackGrid: prevAi,
+        enemyGrid: playerFleetGrid,
+        hitCount: aiHitCount,
         totalShipCells,
-        setAiHitCount,
+        setHitCount: setAiHitCount,
         setWinner,
         winnerName: "ai",
-      })
+      });
+
+      setLastAiAttackWasHit(result.wasHit);
+
+      if (result.wasHit) {
+        console.log("AI made a hit");
+      } else {
+        console.log("AI missed");
+      }
+
+      if (result.wasSunk) {
+        console.log("AI sunk a ship");
+      }
+
+      return result.nextGrid;
     });
+
   };
+  
   return (
     <div className="board-wrapper">
       <div className="board">

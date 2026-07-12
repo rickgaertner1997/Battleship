@@ -1,6 +1,3 @@
-import { AttackCellState } from "../constants/base.ts";
-import { ships } from "../constants/ships.ts";
-
 export function performAttack({
   row,
   col,
@@ -23,7 +20,10 @@ export function performAttack({
       for (let col = 0; col < enemyGrid[row].length; col++) {
         if (
           enemyGrid[row][col] === shipId &&
-          attackGrid[row][col] === AttackCellState.Hit
+          (
+            attackGrid[row][col] === AttackCellState.Hit ||
+            attackGrid[row][col] === AttackCellState.Sunk
+          )
         ) {
           hitParts.push({ row, col });
         }
@@ -35,14 +35,29 @@ export function performAttack({
 
   const next = attackGrid.map((r) => [...r]);
 
-  if (next[row][col] !== null) return attackGrid;
+  if (next[row][col] !== null) {
+    return {
+      nextGrid: attackGrid,
+      wasHit: false,
+      wasSunk: false,
+      alreadyAttacked: true,
+    };
+  }
 
   const enemyCell = enemyGrid[row][col];
 
   if (enemyCell == null) {
     next[row][col] = AttackCellState.Miss;
-    return next;
+
+    return {
+      nextGrid: next,
+      wasHit: false,
+      wasSunk: false,
+      alreadyAttacked: false,
+    };
   }
+
+  next[row][col] = AttackCellState.Hit;
 
   const nextHitCount = hitCount + 1;
   setHitCount(nextHitCount);
@@ -51,16 +66,23 @@ export function performAttack({
     setWinner(winnerName);
   }
 
-  next[row][col] = AttackCellState.Hit;
-
   const selectedShip = getShip(enemyCell);
   const hitParts = getHittedShipParts(enemyGrid, next, enemyCell);
 
+  let wasSunk = false;
+
   if (selectedShip && hitParts.length === selectedShip.length) {
+    wasSunk = true;
+
     hitParts.forEach(({ row, col }) => {
       next[row][col] = AttackCellState.Sunk;
     });
   }
 
-  return next;
+  return {
+    nextGrid: next,
+    wasHit: true,
+    wasSunk,
+    alreadyAttacked: false,
+  };
 }
