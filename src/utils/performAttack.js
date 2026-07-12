@@ -1,41 +1,15 @@
+import { AttackCellState } from "../constants/base.ts";
+import { ships } from "../constants/ships.ts";
+
 export function performAttack({
   row,
   col,
   attackGrid,
   enemyGrid,
-  hitCount,
-  totalShipCells,
-  setHitCount,
-  setWinner,
-  winnerName,
 }) {
-  function getShip(shipId) {
-    return ships.find((ship) => ship.id === shipId) || null;
-  }
+  const nextGrid = attackGrid.map((gridRow) => [...gridRow]);
 
-  function getHittedShipParts(enemyGrid, attackGrid, shipId) {
-    const hitParts = [];
-
-    for (let row = 0; row < enemyGrid.length; row++) {
-      for (let col = 0; col < enemyGrid[row].length; col++) {
-        if (
-          enemyGrid[row][col] === shipId &&
-          (
-            attackGrid[row][col] === AttackCellState.Hit ||
-            attackGrid[row][col] === AttackCellState.Sunk
-          )
-        ) {
-          hitParts.push({ row, col });
-        }
-      }
-    }
-
-    return hitParts;
-  }
-
-  const next = attackGrid.map((r) => [...r]);
-
-  if (next[row][col] !== null) {
+  if (nextGrid[row][col] !== null) {
     return {
       nextGrid: attackGrid,
       wasHit: false,
@@ -44,43 +18,60 @@ export function performAttack({
     };
   }
 
-  const enemyCell = enemyGrid[row][col];
+  const shipId = enemyGrid[row][col];
 
-  if (enemyCell == null) {
-    next[row][col] = AttackCellState.Miss;
+  if (shipId == null) {
+    nextGrid[row][col] = AttackCellState.Miss;
 
     return {
-      nextGrid: next,
+      nextGrid,
       wasHit: false,
       wasSunk: false,
       alreadyAttacked: false,
     };
   }
 
-  next[row][col] = AttackCellState.Hit;
+  nextGrid[row][col] = AttackCellState.Hit;
 
-  const nextHitCount = hitCount + 1;
-  setHitCount(nextHitCount);
+  const selectedShip =
+    ships.find((ship) => ship.id === shipId) ?? null;
 
-  if (nextHitCount === totalShipCells) {
-    setWinner(winnerName);
+  const hitParts = [];
+
+  for (let gridRow = 0; gridRow < enemyGrid.length; gridRow++) {
+    for (
+      let gridCol = 0;
+      gridCol < enemyGrid[gridRow].length;
+      gridCol++
+    ) {
+      const belongsToShip =
+        enemyGrid[gridRow][gridCol] === shipId;
+
+      const isDamaged =
+        nextGrid[gridRow][gridCol] === AttackCellState.Hit ||
+        nextGrid[gridRow][gridCol] === AttackCellState.Sunk;
+
+      if (belongsToShip && isDamaged) {
+        hitParts.push({
+          row: gridRow,
+          col: gridCol,
+        });
+      }
+    }
   }
 
-  const selectedShip = getShip(enemyCell);
-  const hitParts = getHittedShipParts(enemyGrid, next, enemyCell);
+  const wasSunk =
+    selectedShip !== null &&
+    hitParts.length === selectedShip.length;
 
-  let wasSunk = false;
-
-  if (selectedShip && hitParts.length === selectedShip.length) {
-    wasSunk = true;
-
+  if (wasSunk) {
     hitParts.forEach(({ row, col }) => {
-      next[row][col] = AttackCellState.Sunk;
+      nextGrid[row][col] = AttackCellState.Sunk;
     });
   }
 
   return {
-    nextGrid: next,
+    nextGrid,
     wasHit: true,
     wasSunk,
     alreadyAttacked: false,

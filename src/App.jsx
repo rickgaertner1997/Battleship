@@ -17,6 +17,8 @@ function App() {
   const [draggedShip, setDraggedShip] = useState(null);
   const [shipOrientation, setShipOrientation] = useState("horizontal");
   const [isFleetLocked, setIsFleetLocked] = useState(false);
+  const [lastAiAttackWasHit, setLastAiAttackWasHit] = useState(false);
+
 
   const [playerHitCount, setPlayerHitCount] = useState(0);
   const [aiHitCount, setAiHitCount] = useState(0);
@@ -189,6 +191,8 @@ function App() {
               totalShipCells={totalShipCells}
               setWinner={setWinner}
               disabled={winner !== null}
+              setLastAiAttackWasHit={setLastAiAttackWasHit}
+              lastAiAttackWasHit={lastAiAttackWasHit}
             />
           </div>
         </>

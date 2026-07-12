@@ -16,72 +16,80 @@ export default function AttackBoard({
   setHitCount,
   totalShipCells,
   setWinner,
-  disabled
+  disabled,
+  setLastAiAttackWasHit,
+  lastAiAttackWasHit
+  
 }) {
 
   function handleCellClick(row, col) {
     if (disabled) return;
-    console.log("setGrid");
-    console.log(setGrid);
-    setGrid((prev) => {
-      const result = performAttack({
-        row,
-        col,
-        attackGrid: prev,
-        enemyGrid,
-        hitCount,
-        totalShipCells,
-        setHitCount,
-        setWinner,
-        winnerName: "player",
-      });
+    if (grid[row][col] !== null) return;
 
-      return result.nextGrid;
+    const playerResult = performAttack({
+      row,
+      col,
+      attackGrid: grid,
+      enemyGrid,
     });
 
-  setEnemyAttackGrid((prevAi) => {
-      const availableCells = [];
+    setGrid(playerResult.nextGrid);
 
-      for (let row = 0; row < prevAi.length; row++) {
-        for (let col = 0; col < prevAi[row].length; col++) {
-          if (prevAi[row][col] === null) {
-            availableCells.push({ row, col });
-          }
+    if (playerResult.wasHit) {
+      const nextPlayerHitCount = hitCount + 1;
+
+      setHitCount(nextPlayerHitCount);
+
+      if (nextPlayerHitCount >= totalShipCells) {
+        setWinner("player");
+        return;
+      }
+    }
+
+    const availableCells = [];
+
+    for (let aiRow = 0; aiRow < enemyAttackGrid.length; aiRow++) {
+      for (
+        let aiCol = 0;
+        aiCol < enemyAttackGrid[aiRow].length;
+        aiCol++
+      ) {
+        if (enemyAttackGrid[aiRow][aiCol] === null) {
+          availableCells.push({
+            row: aiRow,
+            col: aiCol,
+          });
         }
       }
+    }
 
-      if (availableCells.length === 0) return prevAi;
+    if (availableCells.length === 0) return;
 
-      const randomCell =
-        availableCells[Math.floor(Math.random() * availableCells.length)];
+    const aiCell =
+      availableCells[
+        Math.floor(Math.random() * availableCells.length)
+      ];
 
-      const result = performAttack({
-        row: randomCell.row,
-        col: randomCell.col,
-        attackGrid: prevAi,
-        enemyGrid: playerFleetGrid,
-        hitCount: aiHitCount,
-        totalShipCells,
-        setHitCount: setAiHitCount,
-        setWinner,
-        winnerName: "ai",
-      });
-
-      setLastAiAttackWasHit(result.wasHit);
-
-      if (result.wasHit) {
-        console.log("AI made a hit");
-      } else {
-        console.log("AI missed");
-      }
-
-      if (result.wasSunk) {
-        console.log("AI sunk a ship");
-      }
-
-      return result.nextGrid;
+    const aiResult = performAttack({
+      row: aiCell.row,
+      col: aiCell.col,
+      attackGrid: enemyAttackGrid,
+      enemyGrid: playerFleetGrid,
     });
 
+    setEnemyAttackGrid(aiResult.nextGrid);
+    setLastAiAttackWasHit(aiResult.wasHit);
+    console.log("AI hit: "+ aiResult.wasHit);
+    console.log("aiCell row " + aiCell.row + " aiCell col " + aiCell.col);
+    if (aiResult.wasHit) {
+      const nextAiHitCount = aiHitCount + 1;
+
+      setAiHitCount(nextAiHitCount);
+
+      if (nextAiHitCount >= totalShipCells) {
+        setWinner("ai");
+      }
+    }
   };
   
   return (
