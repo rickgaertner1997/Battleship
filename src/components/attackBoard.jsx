@@ -48,6 +48,11 @@ export default function AttackBoard({
       }
     }
 
+    if(playerResult.wasHit){
+      setAiResponse("Damnit");
+      return
+    }
+
     const availableCells = [];
 
     for (let aiRow = 0; aiRow < enemyAttackGrid.length; aiRow++) {
@@ -67,40 +72,47 @@ export default function AttackBoard({
 
     if (availableCells.length === 0) return;
 
-    const aiCell =
-      availableCells[
+
+    
+    let aiResult = null
+    let nextAiHitCount = null
+    do{
+
+      const aiCell =
+        availableCells[
         Math.floor(Math.random() * availableCells.length)
       ];
-
-    const aiResult = performAttack({
-      row: aiCell.row,
-      col: aiCell.col,
-      attackGrid: enemyAttackGrid,
-      enemyGrid: playerFleetGrid,
-    });
-
-    setEnemyAttackGrid(aiResult.nextGrid);
-    setLastAiAttackWasHit(aiResult.wasHit);
     
-    if (aiResult.wasSunk) {
-      setAiResponse("The AI sunk one of your ships!");
-    } else if (aiResult.wasHit) {
-      setAiResponse("The AI hit your ship!");
-    } else {
-      setAiResponse("The AI missed.");
-    }
-    
-    console.log("AI hit: "+ aiResult.wasHit);
-    console.log("aiCell row " + aiCell.row + " aiCell col " + aiCell.col);
-    if (aiResult.wasHit) {
-      const nextAiHitCount = aiHitCount + 1;
+      aiResult = performAttack({
+        row: aiCell.row,
+        col: aiCell.col,
+        attackGrid: enemyAttackGrid,
+        enemyGrid: playerFleetGrid,
+      });
 
-      setAiHitCount(nextAiHitCount);
+      setEnemyAttackGrid(aiResult.nextGrid);
+      setLastAiAttackWasHit(aiResult.wasHit);
 
-      if (nextAiHitCount >= totalShipCells) {
-        setWinner("ai");
+      if (aiResult.wasSunk) {
+        setAiResponse("The AI sunk one of your ships!");
+      } else if (aiResult.wasHit) {
+        setAiResponse("The AI hit your ship!");
+      } else {
+        setAiResponse("The AI missed.");
       }
-    }
+      
+      console.log("AI hit: "+ aiResult.wasHit);
+      console.log("aiCell row " + aiCell.row + " aiCell col " + aiCell.col);
+      if (aiResult.wasHit) {
+        nextAiHitCount = aiHitCount + 1;
+
+        setAiHitCount(nextAiHitCount);
+
+        if (nextAiHitCount >= totalShipCells) {
+          setWinner("ai");
+        }
+      }
+    }while(aiResult.wasHit && nextAiHitCount < totalShipCells)
   };
   
   return (
