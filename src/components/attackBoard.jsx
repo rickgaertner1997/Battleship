@@ -18,8 +18,10 @@ export default function AttackBoard({
   setWinner,
   disabled,
   setLastAiAttackWasHit,
-  lastAiAttackWasHit
-  
+  lastAiAttackWasHit,
+  lastAiAttack,
+  aiResponse,
+  setAiResponse,
 }) {
 
   function handleCellClick(row, col) {
@@ -79,6 +81,15 @@ export default function AttackBoard({
 
     setEnemyAttackGrid(aiResult.nextGrid);
     setLastAiAttackWasHit(aiResult.wasHit);
+    
+    if (aiResult.wasSunk) {
+      setAiResponse("The AI sunk one of your ships!");
+    } else if (aiResult.wasHit) {
+      setAiResponse("The AI hit your ship!");
+    } else {
+      setAiResponse("The AI missed.");
+    }
+    
     console.log("AI hit: "+ aiResult.wasHit);
     console.log("aiCell row " + aiCell.row + " aiCell col " + aiCell.col);
     if (aiResult.wasHit) {
@@ -93,18 +104,38 @@ export default function AttackBoard({
   };
   
   return (
-    <div className="board-wrapper">
-      <div className="board">
-        {grid.map((row, row_id) =>
-          row.map((value, column_id) => (
-            <Cell
-              key={`${row_id}-${column_id}`}
-              value={ value }
-              disabled={disabled}
-              onClick={() => handleCellClick(row_id, column_id)}
-            />
-          ))
+    <div className="attack-board-section">
+      <div className="ai-dialogue">
+        {lastAiAttack && (
+          <div className="speech-bubble attack-bubble">
+            AI attacked{" "}
+            <strong>
+              {String.fromCharCode(65 + lastAiAttack.col)}
+              {lastAiAttack.row + 1}
+            </strong>
+          </div>
         )}
+
+        {aiResponse && (
+          <div className="speech-bubble response-bubble">
+            {aiResponse}
+          </div>
+        )}
+      </div>
+
+      <div className="board-wrapper">
+        <div className="board">
+          {grid.map((row, row_id) =>
+            row.map((value, column_id) => (
+              <Cell
+                key={`${row_id}-${column_id}`}
+                value={ value }
+                disabled={disabled}
+                onClick={() => handleCellClick(row_id, column_id)}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

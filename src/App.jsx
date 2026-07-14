@@ -18,6 +18,8 @@ function App() {
   const [shipOrientation, setShipOrientation] = useState("horizontal");
   const [isFleetLocked, setIsFleetLocked] = useState(false);
   const [lastAiAttackWasHit, setLastAiAttackWasHit] = useState(false);
+  const [lastAiAttack, setLastAiAttack] = useState(null);
+  const [aiResponse, setAiResponse] = useState("");
 
 
   const [playerHitCount, setPlayerHitCount] = useState(0);
@@ -193,6 +195,9 @@ function App() {
               disabled={winner !== null}
               setLastAiAttackWasHit={setLastAiAttackWasHit}
               lastAiAttackWasHit={lastAiAttackWasHit}
+              lastAiAttack={lastAiAttack}
+              aiResponse={aiResponse}
+              setAiResponse={setAiResponse}
             />
           </div>
         </>
