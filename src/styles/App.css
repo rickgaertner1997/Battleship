@@ -1,42 +1,90 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 24px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.fleet-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  width: 100%;
+  gap: 32px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.attack-board-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 20px;
+  width: 100%;
+}
+
+.ai-dialogue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: min(100%, 520px);
+  min-height: 90px;
+  gap: 12px;
+}
+
+.response-bubble {
+  margin-left: 32px;
+}
+
+.board-wrapper {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 48px);
+  grid-template-rows: repeat(10, 48px);
+  gap: 3px;
+}
+
+.board > * {
+  width: 48px;
+  height: 48px;
+}
+
+h1,
+h2 {
+  color: #8cffb8;
+  text-shadow:
+    0 0 5px rgba(31, 255, 116, 0.7),
+    0 0 14px rgba(31, 255, 116, 0.35);
+}
+
+@media (max-width: 620px) {
+  .app {
+    padding: 12px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .fleet-layout {
+    gap: 18px;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .board {
+    grid-template-columns: repeat(10, minmax(26px, 8vw));
+    grid-template-rows: repeat(10, minmax(26px, 8vw));
+    gap: 2px;
   }
-}
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .board > * {
+    width: 100%;
+    height: 100%;
+  }
 }

@@ -1,14 +1,136 @@
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  color: #9dfcb2;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(0, 80, 40, 0.35),
+      transparent 70%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(40, 255, 120, 0.04) 0,
+      rgba(40, 255, 120, 0.04) 1px,
+      transparent 1px,
+      transparent 32px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(40, 255, 120, 0.04) 0,
+      rgba(40, 255, 120, 0.04) 1px,
+      transparent 1px,
+      transparent 32px
+    ),
+    #04140d;
 }
 
-button:hover {
-  border-color: var(--accent);
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 3px
+    );
+
+  opacity: 0.35;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      transparent 55%,
+      rgba(0, 0, 0, 0.45) 100%
+    );
+}
+
+.board-wrapper,
+.ai-dialogue {
+  position: relative;
+  z-index: 1;
+
+  padding: 16px;
+
+  background: rgba(0, 25, 15, 0.75);
+  border: 1px solid #1fff74;
+  border-radius: 6px;
+
+  box-shadow:
+    0 0 12px rgba(0, 255, 100, 0.35),
+    inset 0 0 18px rgba(0, 255, 100, 0.08);
+}
+
+button {
+  padding: 10px 16px;
+
+  color: #6effa8;
+  background: #082616;
+  border: 1px solid #2dff88;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+}
+
+button:hover:not(:disabled) {
+  background: #104127;
+  box-shadow: 0 0 10px #1fff74;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.speech-bubble {
+  position: relative;
+
+  padding: 12px 18px;
+
+  color: #8cffb8;
+  background: #062214;
+  border: 1px solid #2dff88;
+  border-radius: 16px;
+
+  box-shadow: 0 0 10px rgba(0, 255, 120, 0.3);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px rgba(0, 255, 120, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 24px rgba(0, 255, 120, 0.8);
+  }
+}
+
+.attack-bubble {
+  animation: pulse 2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attack-bubble {
+    animation: none;
+  }
 }
