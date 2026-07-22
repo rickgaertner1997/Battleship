@@ -9,3 +9,4 @@ export enum FleetCellState {
   Ship
 }
 
+export const CELL_SIZE = 60;
