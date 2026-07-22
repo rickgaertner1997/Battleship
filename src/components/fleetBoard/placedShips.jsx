@@ -1,4 +1,4 @@
-import ShipOverlay from "./ShipOverlay.jsx";
+import ShipOverlay from "./shipOverlay.jsx";
 
 export default function PlacedShips({
   placedShips,

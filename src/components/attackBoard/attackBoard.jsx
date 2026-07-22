@@ -1,6 +1,6 @@
 import AiDialogue from "./aiDialogue.jsx";
 import AttackGrid from "./attackGrid.jsx";
-import { useAttackTurn } from "../hooks/useAttackTurn.js";
+import { useAttackTurn } from "../../hooks/useAttackTurn.js";
 
 export default function AttackBoard(props) {
   const {

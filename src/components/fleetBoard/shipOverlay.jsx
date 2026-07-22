@@ -1,4 +1,4 @@
-import { CELL_SIZE } from "../constants/base.ts";
+import { CELL_SIZE } from "../../constants/base.ts";
 
 export default function ShipOverlay({
   ship,

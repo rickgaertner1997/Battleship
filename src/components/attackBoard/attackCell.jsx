@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { AttackCellState } from "../constants/base.js";
+import { AttackCellState } from "../../constants/base.js";
 
 export default function Cell({ value, onClick, disabled }) {
 

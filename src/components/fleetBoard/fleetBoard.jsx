@@ -1,5 +1,5 @@
-import FleetGrid from "./FleetGrid.jsx";
-import PlacedShips from "./PlacedShips.jsx";
+import FleetGrid from "./fleetGrid.jsx";
+import PlacedShips from "./placedShips.jsx";
 
 export default function FleetBoard({
   grid,
