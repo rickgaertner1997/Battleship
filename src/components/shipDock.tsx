@@ -1,6 +1,16 @@
 import "../styles/components/shipDock.css";
 
-export default function ShipDock({ ships, onDragShip }) {
+import type { Ship } from "../../utils/placeShip";
+
+interface ShipDockProps {
+  ships: Ship[];
+  onDragShip: (ship: Ship) => void;
+}
+
+export default function ShipDock({
+  ships,
+  onDragShip,
+}: ShipDockProps) {
   return (
     <div className="ship-dock">
       <h2>Your Fleet</h2>

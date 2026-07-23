@@ -1,15 +1,37 @@
-import { performAttack } from "./performAttack.js";
-import { getAvailableCells } from "./getAvailableCells.js";
+import { performAttack } from "./performAttack";
+import { getAvailableCells } from "./getAvailableCells";
+
+import type { AttackCellValue } from "../constants/base";
+import type { GridPosition } from "./getAvailableCells";
+
+export type ShipId = string | number;
+export type AttackGrid = (AttackCellValue | null)[][];
+export type FleetGrid = (ShipId | null)[][];
+
+interface PerformAiTurnOptions {
+  attackGrid: AttackGrid;
+  playerFleetGrid: FleetGrid;
+  currentHitCount: number;
+  totalShipCells: number;
+}
+
+interface PerformAiTurnResult {
+  nextGrid: AttackGrid;
+  nextHitCount: number;
+  lastAttack: GridPosition | null;
+  response: string;
+  won: boolean;
+}
 
 export function performAiTurn({
   attackGrid,
   playerFleetGrid,
   currentHitCount,
   totalShipCells,
-}) {
-  let nextGrid = attackGrid;
+}: PerformAiTurnOptions): PerformAiTurnResult {
+  let nextGrid: AttackGrid = attackGrid;
   let nextHitCount = currentHitCount;
-  let lastAttack = null;
+  let lastAttack: GridPosition | null = null;
   let response = "";
 
   while (nextHitCount < totalShipCells) {
@@ -19,7 +41,10 @@ export function performAiTurn({
       break;
     }
 
-    const randomIndex = Math.floor(Math.random() * availableCells.length);
+    const randomIndex = Math.floor(
+      Math.random() * availableCells.length
+    );
+
     const selectedCell = availableCells[randomIndex];
 
     const result = performAttack({
@@ -44,7 +69,6 @@ export function performAiTurn({
       nextHitCount += 1;
     }
 
-    // AI continues only after a hit.
     if (!result.wasHit) {
       break;
     }

@@ -1,14 +1,16 @@
 import { useState } from "react";
 
-import SetupPhase from "./components/setup/setupPhase.jsx";
-import AttackPhase from "./components/battle/attackPhase.jsx";
+import SetupPhase from "./components/setup/setupPhase";
+import AttackPhase from "./components/battle/attackPhase";
 
-import { ships } from "./constants/ships.js";
+import { ships } from "./constants/ships";
 
-import { useFleetSetup } from "./hooks/useFleetSetup.js";
-import { useBattle } from "./hooks/useBattle.js";
+import { useFleetSetup } from "./hooks/useFleetSetup";
+import { useBattle } from "./hooks/useBattle";
 
-import { buildRandomFleetGrid } from "./utils/buildRandomFleetGrid.js";
+import { buildRandomFleetGrid } from "./utils/buildRandomFleetGrid";
+
+type Phase = "setup" | "attack";
 
 const TOTAL_SHIP_CELLS = ships.reduce(
   (total, ship) => total + ship.length,
@@ -16,20 +18,21 @@ const TOTAL_SHIP_CELLS = ships.reduce(
 );
 
 export default function App() {
-  const [phase, setPhase] = useState("setup");
+  const [phase, setPhase] = useState<Phase>("setup");
 
   const fleetSetup = useFleetSetup(ships);
   const battle = useBattle();
 
-  function handleReady() {
+  function handleReady(): void {
     const fleetLocked = fleetSetup.lockFleet();
 
-    if (!fleetLocked) return;
+    if (!fleetLocked) {
+      return;
+    }
 
     const enemyGrid = buildRandomFleetGrid(ships);
 
     battle.setEnemyGrid(enemyGrid);
-
     setPhase("attack");
   }
 

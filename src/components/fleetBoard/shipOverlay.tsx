@@ -1,11 +1,20 @@
-import { CELL_SIZE } from "../../constants/base.ts";
+import { CELL_SIZE } from "../../constants/base";
+
+import type { PlacedShip } from "../../hooks/useFleetSetup";
+
+interface ShipOverlayProps {
+  ship: PlacedShip;
+  isFleetLocked: boolean;
+  onRepositionShip: (ship: PlacedShip) => void;
+}
 
 export default function ShipOverlay({
   ship,
   isFleetLocked,
   onRepositionShip,
-}) {
-  const isHorizontal = ship.orientation === "horizontal";
+}: ShipOverlayProps) {
+  const isHorizontal =
+    ship.orientation === "horizontal";
 
   const width = isHorizontal
     ? ship.length * CELL_SIZE
@@ -15,8 +24,10 @@ export default function ShipOverlay({
     ? CELL_SIZE
     : ship.length * CELL_SIZE;
 
-  function handleClick() {
-    if (isFleetLocked) return;
+  function handleClick(): void {
+    if (isFleetLocked) {
+      return;
+    }
 
     onRepositionShip(ship);
   }

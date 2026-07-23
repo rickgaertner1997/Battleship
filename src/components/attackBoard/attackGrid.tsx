@@ -1,6 +1,17 @@
-import Cell from "./attackCell.jsx";
+import Cell from "./attackCell";
+import type { AttackCellValue } from "../../constants/base";
 
-export default function AttackGrid({ grid, disabled, onCellClick }) {
+interface AttackGridProps {
+  grid: (AttackCellValue | null)[][];
+  disabled: boolean;
+  onCellClick: (row: number, col: number) => void;
+}
+
+export default function AttackGrid({
+  grid,
+  disabled,
+  onCellClick,
+}: AttackGridProps) {
   return (
     <div className="board-wrapper">
       <div className="board">

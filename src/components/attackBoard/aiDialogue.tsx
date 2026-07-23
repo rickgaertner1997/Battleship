@@ -1,4 +1,17 @@
-export default function AiDialogue({ lastAiAttack, aiResponse }) {
+interface AttackPosition {
+  row: number;
+  col: number;
+}
+
+interface AiDialogueProps {
+  lastAiAttack: AttackPosition | null;
+  aiResponse: string;
+}
+
+export default function AiDialogue({
+  lastAiAttack,
+  aiResponse,
+}: AiDialogueProps) {
   return (
     <div className="ai-dialogue">
       {lastAiAttack && (

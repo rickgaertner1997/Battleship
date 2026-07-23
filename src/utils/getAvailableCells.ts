@@ -1,5 +1,12 @@
-export function getAvailableCells(grid) {
-  const availableCells = [];
+export interface GridPosition {
+  row: number;
+  col: number;
+}
+
+export function getAvailableCells<T>(
+  grid: (T | null)[][]
+): GridPosition[] {
+  const availableCells: GridPosition[] = [];
 
   for (let row = 0; row < grid.length; row++) {
     for (let col = 0; col < grid[row].length; col++) {

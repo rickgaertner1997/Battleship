@@ -1,13 +1,40 @@
-import { AttackCellState } from "../constants/base.ts";
-import { ships } from "../constants/ships.ts";
+import { AttackCellState } from "../constants/base";
+import type { AttackCellValue } from "../constants/base";
+
+import { ships } from "../constants/ships";
+
+export type ShipId = string | number;
+export type AttackGrid = (AttackCellValue | null)[][];
+export type FleetGrid = (ShipId | null)[][];
+
+interface AttackPosition {
+  row: number;
+  col: number;
+}
+
+interface PerformAttackOptions {
+  row: number;
+  col: number;
+  attackGrid: AttackGrid;
+  enemyGrid: FleetGrid;
+}
+
+interface PerformAttackResult {
+  nextGrid: AttackGrid;
+  wasHit: boolean;
+  wasSunk: boolean;
+  alreadyAttacked: boolean;
+}
 
 export function performAttack({
   row,
   col,
   attackGrid,
   enemyGrid,
-}) {
-  const nextGrid = attackGrid.map((gridRow) => [...gridRow]);
+}: PerformAttackOptions): PerformAttackResult {
+  const nextGrid: AttackGrid = attackGrid.map((gridRow) => [
+    ...gridRow,
+  ]);
 
   if (nextGrid[row][col] !== null) {
     return {
@@ -20,7 +47,7 @@ export function performAttack({
 
   const shipId = enemyGrid[row][col];
 
-  if (shipId == null) {
+  if (shipId === null) {
     nextGrid[row][col] = AttackCellState.Miss;
 
     return {
@@ -36,7 +63,7 @@ export function performAttack({
   const selectedShip =
     ships.find((ship) => ship.id === shipId) ?? null;
 
-  const hitParts = [];
+  const hitParts: AttackPosition[] = [];
 
   for (let gridRow = 0; gridRow < enemyGrid.length; gridRow++) {
     for (
