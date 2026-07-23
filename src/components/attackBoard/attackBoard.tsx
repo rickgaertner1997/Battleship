@@ -5,6 +5,7 @@ import type {
 
 import AiDialogue from "./aiDialogue";
 import AttackGrid from "./attackGrid";
+import MiniFleetGrid from "./miniFleetGrid";
 
 import { useAttackTurn } from "../../hooks/useAttackTurn";
 
@@ -14,6 +15,7 @@ import type {
   FleetGrid,
   Winner,
 } from "../../hooks/useBattle";
+
 
 interface AttackBoardProps {
   grid: AttackGridData;
@@ -71,9 +73,12 @@ interface AttackBoardProps {
 export default function AttackBoard(
   props: AttackBoardProps
 ) {
+
   const {
     grid,
     enemyGrid,
+    playerFleetGrid,
+    enemyAttackGrid,
     lastAiAttack,
     aiResponse,
     disabled,
@@ -88,6 +93,11 @@ export default function AttackBoard(
 
   return (
     <div className="attack-board-section">
+      <MiniFleetGrid
+        fleetGrid={playerFleetGrid}
+        attackGrid={enemyAttackGrid}
+      />
+
       <AiDialogue
         lastAiAttack={lastAiAttack}
         aiResponse={aiResponse}

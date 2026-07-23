@@ -1,0 +1,57 @@
+.attack-board-section {
+  position: relative;
+}
+
+.mini-fleet {
+  position: absolute;
+  top: 0;
+  right: 70px;
+
+  padding: 20px;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  z-index: 10;
+}
+
+.mini-fleet__title {
+  margin: 0 0 8px;
+
+  font-size: 14px;
+  text-align: center;
+  color: var(--text);
+}
+
+.mini-fleet__grid {
+  display: grid;
+  grid-template-columns:
+    repeat(10, 14px);
+  grid-template-rows:
+    repeat(10, 14px);
+
+  gap: 1px;
+}
+
+.mini-fleet__cell {
+  width: 14px;
+  height: 14px;
+
+  box-sizing: border-box;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.mini-fleet__cell--ship {
+  background: #4b5563;
+}
+
+.mini-fleet__cell--miss {
+  background: #d1d5db;
+}
+
+.mini-fleet__cell--hit {
+  background: #dc2626;
+}
