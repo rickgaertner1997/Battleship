@@ -1,20 +1,25 @@
-import { AttackCellState } from "../../constants/base";
-import type { AttackCellValue } from "../../constants/base";
+import {
+  AttackCellState,
+} from "../../constants/base";
 
-interface CellProps {
+import type {
+  AttackCellValue,
+} from "../../constants/base";
+
+interface AttackCellProps {
   value: AttackCellValue | null;
   onClick: () => void;
   disabled: boolean;
 }
 
-export default function Cell({
+export default function AttackCell({
   value,
   onClick,
   disabled,
-}: CellProps) {
+}: AttackCellProps) {
   let symbol = "";
 
-  if (value !== null && value !== AttackCellState.Miss) {
+  if (value === AttackCellState.Hit) {
     symbol = "X";
   }
 
@@ -22,17 +27,12 @@ export default function Cell({
     symbol = "O";
   }
 
-  if (value === AttackCellState.Sunk) {
-    symbol = "🔥";
-  }
-
   return (
     <button
       type="button"
-      onClick={onClick}
-      disabled={disabled}
       className="cell"
-      aria-label={`cell ${value}`}
+      disabled={disabled}
+      onClick={onClick}
     >
       {symbol}
     </button>

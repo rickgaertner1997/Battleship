@@ -19,6 +19,7 @@
   gap: 0;
   z-index: 1;
 }
+
 .ship-overlay {
   position: absolute;
   z-index: 2;
@@ -33,3 +34,40 @@
   align-items: flex-start;
   gap: 60px;
 }
+.attack-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: 100%;
+}
+
+
+.sunk-ship-overlay {
+  position: absolute;
+  z-index: 2;
+
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sunk-ship-image--vertical {
+  object-fit: fill;
+}
+
+.sunk-ship-image {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+
+  filter:
+    invert(55%)
+    sepia(0%)
+    saturate(0%)
+    brightness(80%);
+
+  opacity: 0.5;
+  pointer-events: none;
+}
+

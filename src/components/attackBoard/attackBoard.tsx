@@ -73,6 +73,7 @@ export default function AttackBoard(
 ) {
   const {
     grid,
+    enemyGrid,
     lastAiAttack,
     aiResponse,
     disabled,
@@ -94,6 +95,7 @@ export default function AttackBoard(
 
       <AttackGrid
         grid={grid}
+        enemyGrid={enemyGrid}
         disabled={isGridDisabled}
         onCellClick={handleCellClick}
       />
