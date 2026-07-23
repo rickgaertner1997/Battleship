@@ -20,6 +20,7 @@ interface PerformAiTurnResult {
   nextHitCount: number;
   lastAttack: GridPosition | null;
   response: string;
+  wasHit: boolean;
   won: boolean;
 }
 
@@ -29,56 +30,49 @@ export function performAiTurn({
   currentHitCount,
   totalShipCells,
 }: PerformAiTurnOptions): PerformAiTurnResult {
-  let nextGrid: AttackGrid = attackGrid;
-  let nextHitCount = currentHitCount;
-  let lastAttack: GridPosition | null = null;
-  let response = "";
+  const availableCells = getAvailableCells(attackGrid);
 
-  while (nextHitCount < totalShipCells) {
-    const availableCells = getAvailableCells(nextGrid);
+  if (availableCells.length === 0) {
+    return {
+      nextGrid: attackGrid,
+      nextHitCount: currentHitCount,
+      lastAttack: null,
+      response: "",
+      wasHit: false,
+      won: currentHitCount >= totalShipCells,
+    };
+  }
 
-    if (availableCells.length === 0) {
-      break;
-    }
+  const randomIndex = Math.floor(Math.random() * availableCells.length);
+  const selectedCell = availableCells[randomIndex];
 
-    const randomIndex = Math.floor(
-      Math.random() * availableCells.length
-    );
+  const result = performAttack({
+    row: selectedCell.row,
+    col: selectedCell.col,
+    attackGrid,
+    enemyGrid: playerFleetGrid,
+  });
 
-    const selectedCell = availableCells[randomIndex];
+  const nextHitCount = result.wasHit
+    ? currentHitCount + 1
+    : currentHitCount;
 
-    const result = performAttack({
-      row: selectedCell.row,
-      col: selectedCell.col,
-      attackGrid: nextGrid,
-      enemyGrid: playerFleetGrid,
-    });
+  let response: string;
 
-    nextGrid = result.nextGrid;
-    lastAttack = selectedCell;
-
-    if (result.wasSunk) {
-      response = "The AI sunk one of your ships!";
-    } else if (result.wasHit) {
-      response = "The AI hit your ship!";
-    } else {
-      response = "The AI missed.";
-    }
-
-    if (result.wasHit) {
-      nextHitCount += 1;
-    }
-
-    if (!result.wasHit) {
-      break;
-    }
+  if (result.wasSunk) {
+    response = "The AI sank one of your ships!";
+  } else if (result.wasHit) {
+    response = "The AI hit your ship!";
+  } else {
+    response = "The AI missed. Your turn!";
   }
 
   return {
-    nextGrid,
+    nextGrid: result.nextGrid,
     nextHitCount,
-    lastAttack,
+    lastAttack: selectedCell,
     response,
+    wasHit: result.wasHit,
     won: nextHitCount >= totalShipCells,
   };
 }
